@@ -46,13 +46,22 @@ if [ ${#errors[@]} -eq 0 ]; then
     exit 0
 else
     echo "Oops, something went wrong..."
+    OUTPUT=$'**Lint Errors**:\n'
     for i in "${errors[@]}"
     do
         echo "$i is not formatted correctly"
+        OUTPUT+="$i is not formatted correctly"
+        OUTPUT+=$'\n'
     done
 
+    # Used from: https://github.com/smay1613/cpp-linter-action
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
-    echo $COMMENTS_URL
+
+    OUTPUT+="\nPlease read [http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md](ProtoLint) to help with your errors"
+
+    PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
+
+    curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
 
     exit 1
 fi

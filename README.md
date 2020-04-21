@@ -28,3 +28,4 @@ jobs:
 ```
 
 Forked from: [https://github.com/jidicula/clang-format-action](https://github.com/jidicula/clang-format-action)
+Comment Posting used from: [https://github.com/smay1613/cpp-linter-action](https://github.com/smay1613/cpp-linter-action)
