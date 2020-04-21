@@ -16,13 +16,17 @@
 # Accepts a filepath argument. The filepath passed to this function must point
 # to a .c or .h file. The file is formatted with clang-format and that output is
 # compared to the original file.
+# errors=()
+
 format_diff(){
     local filepath="$1"
     local_format="$(clang-format --style=file --fallback-style=LLVM "${filepath}")"
     diff -q <(cat "${filepath}") <(echo "${local_format}") > /dev/null
     diff_result="$?"
     if [[ "${diff_result}" -ne 0 ]]; then
-	echo "${filepath} is not formatted correctly." >&2
+    # errors+=("${filepath} is not formatted correctly.")
+    # echo "${errors}"
+	echo "${filepath}"
 	return "${diff_result}"
     fi
     return 0
@@ -30,10 +34,28 @@ format_diff(){
 
 cd "$GITHUB_WORKSPACE" || exit 1
 
-echo $INPUT_FINDSTRING
-echo $INPUT_SEARCHPATH
+# echo $INPUT_FINDSTRING
+# echo $INPUT_SEARCHPATH
 
 # All files improperly formatted will be printed to the output.
-find $INPUT_SEARCHPATH -name $INPUT_FINDSTRING | while read -r src_file; do format_diff "${src_file}"; done || exit 1
+err=$(find $INPUT_SEARCHPATH -name $INPUT_FINDSTRING | while read -r src_file; do format_diff "${src_file}"; done)
+errors=($(echo $err | tr " " "\n"))
+
+if [ ${#errors[@]} -eq 0 ]; then
+    echo "No errors"
+    exit 0
+else
+    echo "Oops, something went wrong..."
+    for i in "${errors[@]}"
+    do
+        echo "$i is not formatted correctly"
+    done
+
+    COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
+    echo $COMMENTS_URL
+
+    exit 1
+fi
+
 
 exit 0
