@@ -66,7 +66,9 @@ else
 
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
 
-    curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+    if [ -n "$COMMENTS_URL" ]
+        curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+    fi
 
     exit 1
 fi
