@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.8-buster
 
 LABEL "com.github.actions.name"="clang-format C Check"
 LABEL "com.github.actions.description"="Run clang-format style check for Protobufs"
@@ -11,7 +11,8 @@ LABEL "maintainer"="Adam Clark <adam@martin.ai>"
 
 RUN pip install --upgrade pip
 RUN pip install clang-format
-RUN pip install jq
+RUN apt-get -qq -y install curl jq
+
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
