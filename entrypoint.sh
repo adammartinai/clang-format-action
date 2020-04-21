@@ -34,9 +34,6 @@ format_diff(){
 
 cd "$GITHUB_WORKSPACE" || exit 1
 
-# echo $INPUT_FINDSTRING
-# echo $INPUT_SEARCHPATH
-
 # All files improperly formatted will be printed to the output.
 err=$(find $INPUT_SEARCHPATH -name $INPUT_FINDSTRING | while read -r src_file; do format_diff "${src_file}"; done)
 errors=($(echo $err | tr " " "\n"))
@@ -45,31 +42,25 @@ if [ ${#errors[@]} -eq 0 ]; then
     echo "No errors"
     exit 0
 else
-    echo "Oops, something went wrong..."
     OUTPUT=$'**Lint Errors**\n'
     OUTPUT=$'The following files have lint errors:\n\n'
     for i in "${errors[@]}"
     do
-        echo "$i is not formatted correctly"
         OUTPUT+=$"\`$i\`"
         OUTPUT+=$'\n'
     done
 
-    echo $GITHUB_EVENT_PATH
-    echo $(cat $GITHUB_EVENT_PATH)
     # Used from: https://github.com/smay1613/cpp-linter-action
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 
-    echo $COMMENTS_URL
-
     OUTPUT+=$'\n'
-    OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors"
+    OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors."
+    OUTPUT+=$'\n'
     
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
 
-    if [ -z ${COMMENTS_URL+x} ]; then
-        echo $OUTPUT
-        echo $PAYLOAD
+    if [ "${COMMENTS_URL}" == "null" ]; then
+        printf "$OUTPUT"
     else
         curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL" 
     fi
