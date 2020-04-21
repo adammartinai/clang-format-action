@@ -11,6 +11,7 @@ LABEL "maintainer"="Adam Clark <adam@martin.ai>"
 
 RUN pip install --upgrade pip
 RUN pip install clang-format
+RUN pip install jq
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
