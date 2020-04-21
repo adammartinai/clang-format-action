@@ -46,18 +46,20 @@ if [ ${#errors[@]} -eq 0 ]; then
     exit 0
 else
     echo "Oops, something went wrong..."
-    OUTPUT=$'**Lint Errors**:\n'
+    OUTPUT=$'**Lint Errors**\n'
+    OUTPUT=$'The following files have lint errors:\n\n'
     for i in "${errors[@]}"
     do
-        echo "$i is not formatted correctly"
-        OUTPUT+="$i is not formatted correctly"
+        echo "$i"
+        OUTPUT+="`$i` is not formatted correctly"
         OUTPUT+=$'\n'
     done
 
     # Used from: https://github.com/smay1613/cpp-linter-action
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 
-    OUTPUT+="\nPlease read [http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md](ProtoLint) to help with your errors"
+    OUTPUT+=$'\n'
+    OUTPUT+="Please read [http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md](ProtoLint) to help with your errors"
 
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
 
