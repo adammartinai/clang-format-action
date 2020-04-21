@@ -69,8 +69,11 @@ else
 
     echo $PAYLOAD
 
-    if [ -n "$COMMENTS_URL" ]
-        curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+    if [ -z ${COMMENTS_URL+x} ]; then
+        echo $OUTPUT
+        echo $PAYLOAD
+    else
+        curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL" 
     fi
 
     exit 1
