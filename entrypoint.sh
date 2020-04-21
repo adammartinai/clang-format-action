@@ -55,13 +55,13 @@ else
         OUTPUT+=$'\n'
     done
 
+    echo $GITHUB_EVENT_PATH
+    echo $(cat $GITHUB_EVENT_PATH)
     # Used from: https://github.com/smay1613/cpp-linter-action
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 
     OUTPUT+=$'\n'
     OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors"
-    # OUTPUT+=$'\n\n'
-    # OUTPUT+="To visit the failing run please go [http://github.com/${GITHUB_REPOSITORY}/runs/${GITHUB_RUN_NUMBER}](here)"
     
 
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
