@@ -63,8 +63,11 @@ else
     OUTPUT+=$'\n'
     OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors"
     
+    echo $OUTPUT
 
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
+
+    echo $PAYLOAD
 
     if [ -n "$COMMENTS_URL" ]
         curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
