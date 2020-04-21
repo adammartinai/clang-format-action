@@ -9,7 +9,7 @@ inputs:
   findString:
     description: 'What is the find string to use in the shell script'
     required: false
-    default: '*.[proto]'
+    default: '*.proto'
   searchPath:
     description: 'What is the search path to use in the shell script'
     required: false

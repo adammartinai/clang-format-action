@@ -34,6 +34,6 @@ echo $INPUT_FINDSTRING
 echo $INPUT_SEARCHPATH
 
 # All files improperly formatted will be printed to the output.
-find . -name "*.[proto]" | while read -r src_file; do format_diff "${src_file}"; done || exit 1
+find $INPUT_SEARCHPATH -name $INPUT_FINDSTRING | while read -r src_file; do format_diff "${src_file}"; done || exit 1
 
 exit 0
