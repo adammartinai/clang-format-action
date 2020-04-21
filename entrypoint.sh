@@ -59,7 +59,7 @@ else
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 
     OUTPUT+=$'\n'
-    OUTPUT+="Please read [http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md](ProtoLint) to help with your errors"
+    OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors"
     # OUTPUT+=$'\n\n'
     # OUTPUT+="To visit the failing run please go [http://github.com/${GITHUB_REPOSITORY}/runs/${GITHUB_RUN_NUMBER}](here)"
     
