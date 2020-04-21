@@ -60,14 +60,12 @@ else
     # Used from: https://github.com/smay1613/cpp-linter-action
     COMMENTS_URL=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.comments_url)
 
+    echo $COMMENTS_URL
+
     OUTPUT+=$'\n'
     OUTPUT+="Please read [ProtoLint README.md](http://github.com/${GITHUB_REPOSITORY}/blob/master/docs/PROTO_LINT.md) to help with your errors"
     
-    echo $OUTPUT
-
     PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
-
-    echo $PAYLOAD
 
     if [ -z ${COMMENTS_URL+x} ]; then
         echo $OUTPUT
