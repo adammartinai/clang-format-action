@@ -26,3 +26,5 @@ jobs:
     - name: Run clang-format style check for C programs.
       uses: jidicula/clang-format-action@master
 ```
+
+Forked from: [https://github.com/jidicula/clang-format-action](https://github.com/jidicula/clang-format-action)

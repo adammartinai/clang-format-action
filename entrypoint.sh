@@ -30,7 +30,10 @@ format_diff(){
 
 cd "$GITHUB_WORKSPACE" || exit 1
 
+echo $INPUT_FINDSTRING
+echo $INPUT_SEARCHPATH
+
 # All files improperly formatted will be printed to the output.
-find . -name "*.[hc]" | while read -r src_file; do format_diff "${src_file}"; done || exit 1
+find . -name "*.[proto]" | while read -r src_file; do format_diff "${src_file}"; done || exit 1
 
 exit 0
