@@ -11,6 +11,7 @@ LABEL "maintainer"="Adam Clark <adam@martin.ai>"
 
 RUN pip install --upgrade pip
 RUN pip install clang-format
+RUN apt-get update
 RUN apt-get -qq -y install curl jq
 
 
